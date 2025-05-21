@@ -7,16 +7,16 @@ class Logger:
         self.start_time = time.time()
 
     def info(self, msg: str):
-        print(f"{Fore.LIGHTBLUE_EX}{msg}")
+        print(f"{Fore.LIGHTBLUE_EX}{msg}{Style.RESET_ALL}")
 
     def success(self, msg: str):
         print(f"{msg}")
 
     def warn(self, msg: str):
-        print(f"⚠️  {Fore.LIGHTYELLOW_EX}{msg}")
+        print(f"⚠️  {Fore.LIGHTYELLOW_EX}{msg}{Style.RESET_ALL}")
 
     def error(self, msg: str):
-        print(f"{msg}")
+        print(f"{Fore.LIGHTRED_EX}{msg}{Style.RESET_ALL}")
 
     def bullet(self, msg: str):
         print(f"  • {msg}")

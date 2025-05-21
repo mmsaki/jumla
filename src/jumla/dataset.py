@@ -46,8 +46,8 @@ class Dataset(Files, Parser):
         self.lean_return_type = lean_return_type
         self.lean_arguments = self.build_lean_args()
         self.signature = self.build_signature()
-        self.lean_task = self.build_lean_task()
         self.test_cases = test_cases
+        self.lean_task = self.build_lean_task()
 
         if not os.path.exists(dir):
             os.makedirs(dir)
@@ -127,7 +127,8 @@ class Dataset(Files, Parser):
         function = self.build_lean_function(log=log)
         spec = self.build_lean_spec(log=log)
         theorem = self.build_lean_theorem(log=log)
-        lean_task = f"{imports}\n{function}\n\n{spec}\n\n{theorem}"
+        lean_tests = self.build_lean_tests(log=log)
+        lean_task = f"{imports}\n{function}\n\n{spec}\n\n{theorem}\n\n{lean_tests}"
 
         if log:
             logger.info(f"  [lean] {self.LEAN_TASK_FILENAME} ready")
@@ -188,15 +189,6 @@ class Dataset(Files, Parser):
         parameters = " ".join(params)
         return parameters
 
-    def build_test(self, test_case: Dict[str, str], log=False) -> Dict[str, str]:
-        test = {
-            "input": test_case.get("input", {}),
-            "expected": test_case.get("expected", ""),
-            "unexpected": test_case.get("unexpected", [{}]),
-        }
-
-        return test
-
     def build_lean_tests(self, log=False) -> str:
         tests = []
         for test_case in self.test_cases:
@@ -227,11 +219,20 @@ class Dataset(Files, Parser):
             logger.info(f"  [test] {self.LEAN_TEST_FILENAME} {guard}")
         return guard
 
+    def build_test(self, test_case: Dict[str, str], log=False) -> Dict[str, str]:
+        test = {
+            "input": test_case.get("input", {}),
+            "expected": test_case.get("expected", ""),
+            "unexpected": test_case.get("unexpected", [{}]),
+        }
+
+        return test
+
     def build_tests(self, log=False) -> List[Dict[str, str]]:
         tests = []
         for test in self.test_cases:
             test = self.build_test(test, log=log)
             tests.append(test)
-        if log:
-            logger.info(f"  [tests] {self.TEST_FILENAME} ready")
+            if log:
+                logger.info(f"  [tests] {self.TEST_FILENAME} ready")
         return tests

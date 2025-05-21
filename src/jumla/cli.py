@@ -4,6 +4,7 @@ from pathlib import Path
 from jumla.dataset import Dataset
 from jumla.log import logger
 from os.path import join
+import traceback
 
 
 def main():
@@ -74,4 +75,5 @@ def write_to_dataset(path: Path, task_id: str, log=False, base_dir="dataset"):
         dataset = create_dataset(path, dir_name=full_dir)
         dataset.write_all(log=log)
     except Exception as e:
-        logger.error(f"Failed on {path.name}: {e}")
+        logger.error(f"{path.name}: Failed on {e}")
+        traceback.print_exc()
