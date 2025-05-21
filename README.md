@@ -1,11 +1,12 @@
 # Jumla
 
-![PyPI - Version](https://img.shields.io/pypi/v/jumla)
+[![PyPI - Version](https://img.shields.io/pypi/v/jumla)](https://pypi.org/project/jumla/)
 ![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/mmsaki/jumla)
+![GitHub last commit](https://img.shields.io/github/last-commit/mmsaki/uv4)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/jumla)
 ![PyPI - License](https://img.shields.io/pypi/l/jumla)
 ![GitHub repo size](https://img.shields.io/github/repo-size/mmsaki/jumla)
-![X (formerly Twitter) Follow](https://img.shields.io/twitter/follow/msakiart)
+[![X (formerly Twitter) Follow](https://img.shields.io/twitter/follow/msakiart)](https://x.com/intent/user?screen_name=msakiart)
 
 **Jumla** is a Python package for programmatically generating structured datasets of Lean 4 verification tasks from Python functions, complete with specifications, test cases, and formal proof scaffolds.
 
