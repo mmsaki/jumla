@@ -1,7 +1,7 @@
 [project]
 name = "jumla"
 version = "0.1.0"
-description = "Jumla is a Python package for generating Lean 4 formal verification tasks from Python function signatures and specifications."
+description = "Jumla is a Python package for generating Lean 4 tasks dataset."
 readme = "README.md"
 authors = [
     { name = "Meek Msaki", email = "meek10x@gmail.com" }

@@ -21,17 +21,17 @@ def main():
     if path.is_dir():
         py_files = list(path.glob("*.py"))
         if not py_files:
-            print(f"[!] No .py files found in {path}")
+            logger.warn(f"[!] No .py files found in {path}")
             return
         logger.info(f"Processing {len(py_files)} files in {path}")
         for i, py_file in enumerate(py_files):
-            logger.bullet(f"Processing file: {py_file.name}")
+            logger.bullet(f"file: {py_file.name}")
             task_id = f"task_id_{i}"
             write_to_dataset(py_file, task_id=task_id, log=args.log)
     elif path.suffix == ".py":
         write_to_dataset(path, "task_id_0", log=args.log)
     else:
-        print(f"[✗] Invalid file type: {path.name} (expected .py or directory)")
+        logger.error(f"[✗] Invalid file type: {path.name} (expected .py or directory)")
     logger.finish()
 
 
