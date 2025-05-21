@@ -1,0 +1,17 @@
+[project]
+name = "jumla"
+version = "0.1.0"
+description = "Jumla is a Python package for generating Lean 4 formal verification tasks from Python function signatures and specifications."
+readme = "README.md"
+authors = [
+    { name = "Meek Msaki", email = "meek10x@gmail.com" }
+]
+requires-python = ">=3.10"
+dependencies = []
+
+[project.scripts]
+jumla = "jumla:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
