@@ -130,7 +130,7 @@ class Dataset(Files, Parser):
         lean_task = f"{imports}\n{function}\n\n{spec}\n\n{theorem}"
 
         if log:
-            logger.info(f"  [build] {self.LEAN_TASK_FILENAME} task ready")
+            logger.info(f"  [lean] {self.LEAN_TASK_FILENAME} ready")
 
         return lean_task
 
@@ -149,7 +149,7 @@ class Dataset(Files, Parser):
             f"{self.SPEC_START}\n{self.SPEC_BODY}\n{self.SPEC_END}"
         )
         if log:
-            logger.info(f"  [build] {self.LEAN_TASK_FILENAME} spec ready")
+            logger.info(f"  [spec] {self.LEAN_TASK_FILENAME} {function_definition}")
         return spec
 
     def build_lean_theorem(self, log=False):
@@ -170,7 +170,7 @@ class Dataset(Files, Parser):
         )
 
         if log:
-            logger.info(f"  [build] {self.LEAN_TASK_FILENAME} theorem ready")
+            logger.info(f"  [theorem] {self.LEAN_TASK_FILENAME} {theorem_definition}")
 
         return theorem
 
@@ -187,8 +187,6 @@ class Dataset(Files, Parser):
             "expected": test_case.get("expected", ""),
             "unexpected": test_case.get("unexpected", [{}]),
         }
-        if log:
-            logger.info(f"  [build] {self.TEST_FILENAME} ready")
 
         return test
 
@@ -219,7 +217,7 @@ class Dataset(Files, Parser):
         guard = f"#guard {self.function_name} {args} {operator} ({expected})"
 
         if log:
-            logger.info(f"  [build] {self.LEAN_TEST_FILENAME} ready")
+            logger.info(f"  [test] {self.LEAN_TEST_FILENAME} {guard}")
         return guard
 
     def build_tests(self, log=False) -> List[Dict[str, str]]:
@@ -227,4 +225,6 @@ class Dataset(Files, Parser):
         for test in self.test_cases:
             test = self.build_test(test, log=log)
             tests.append(test)
+        if log:
+            logger.info(f"  [tests] {self.TEST_FILENAME} ready")
         return tests
