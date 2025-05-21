@@ -2,7 +2,7 @@
 
 [![PyPI - Version](https://img.shields.io/pypi/v/jumla)](https://pypi.org/project/jumla/)
 ![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/mmsaki/jumla)
-![GitHub last commit](https://img.shields.io/github/last-commit/mmsaki/uv4)
+![GitHub last commit](https://img.shields.io/github/last-commit/mmsaki/jumla)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/jumla)
 ![PyPI - License](https://img.shields.io/pypi/l/jumla)
 ![GitHub repo size](https://img.shields.io/github/repo-size/mmsaki/jumla)
