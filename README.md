@@ -1,4 +1,4 @@
-# 🧠 Jumla
+# Jumla
 
 **Jumla** is a Python package for programmatically generating structured datasets of Lean 4 verification tasks from Python functions, complete with specifications, test cases, and formal proof scaffolds.
 
@@ -21,7 +21,7 @@ jumla
 ```
 
 
-## 🚀 Usage
+## Usage
 
 Generate a Lean dataset from a single Python task file:
 
@@ -44,43 +44,44 @@ jumla examples/ --log
 ```
 
 
-## 🛠️ Development Setup
+## Development Setup
 
-### 1. Clone the repo
+> [!NOTE]
+> Install `uv` (if not already)
+>
+> ```bash
+> curl -LsSf https://astral.sh/uv/install.sh | sh
+> ```
+
+Clone the repo
 
 ```bash
 git clone https://github.com/mmsaki/jumla
 cd jumla
 ```
 
-### 2. Install `uv` (if not already)
-
-```bash
-curl -LsSf https://astral.sh/uv/install.sh | sh
-```
-
-### 3. Create a virtual environment
+Create a virtual environment
 
 ```bash
 uv venv
 source .venv/bin/activate
 ```
 
-### 4. Install the project in editable mode
+Install the project in editable mode
 
 ```bash
 uv sync
 uv pip install -e .
 ```
 
-### 5. Run the CLI
+Run the CLI
 
 ```bash
 jumla examples/
 ```
 
 
-## 🧪 Example Structure
+## Example Structure
 
 ```python
 # examples/min_of_three.py
