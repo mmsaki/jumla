@@ -3,7 +3,7 @@ import ast
 from typing import Dict, List, Tuple
 
 
-class PythonParser:
+class Parser:
     TYPE_MAPPING = {
         "int": "Int",
         "float": "Float",
