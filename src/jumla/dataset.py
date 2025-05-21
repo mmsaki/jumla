@@ -124,7 +124,7 @@ class Dataset(Files, Parser):
 
     def build_lean_task(self, log=False) -> str:
         imports = "import Mathlib\nimport Aesop\n"
-        function = self.build_lean_function()
+        function = self.build_lean_function(log=log)
         spec = self.build_lean_spec(log=log)
         theorem = self.build_lean_theorem(log=log)
         lean_task = f"{imports}\n{function}\n\n{spec}\n\n{theorem}"
@@ -134,9 +134,14 @@ class Dataset(Files, Parser):
 
         return lean_task
 
-    def build_lean_function(self) -> str:
+    def build_lean_function(self, log=False) -> str:
+        function_definition = f"def {self.function_name} {self.lean_arguments} : {self.lean_return_type} :="
         body = f"{self.CODE_START}\n{self.CODE_BODY}\n{self.CODE_END}"
-        return f"def {self.function_name} {self.lean_arguments} : {self.lean_return_type} :=\n{body}"
+
+        if log:
+            logger.info(f"  [lean] {self.LEAN_TASK_FILENAME} {function_definition}")
+
+        return f"{function_definition}\n{body}"
 
     def build_lean_spec(self, log=False) -> str:
         function_definition = (
@@ -170,7 +175,9 @@ class Dataset(Files, Parser):
         )
 
         if log:
-            logger.info(f"  [theorem] {self.LEAN_TASK_FILENAME} {theorem_definition}")
+            logger.info(
+                f"  [theorem] {self.LEAN_TASK_FILENAME} {theorem_definition} {spec_prop}"
+            )
 
         return theorem
 
