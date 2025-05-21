@@ -29,20 +29,20 @@ class Dataset(Files, Parser):
     def __init__(
         self,
         function: str,
-        description: str,
-        inputs: str,
-        outputs: str,
+        description_doc: str,
+        input_doc: str,
+        output_doc: str,
         test_cases: List[Dict[str, str]],
         dir="task_id_0",
     ):
         self.function = function
-        self.description = description
-        self.inputs = inputs
-        self.outputs = outputs
-        function_name, params, return_type = self.extract_function_signature()
+        self.description_doc = description_doc
+        self.input_doc = input_doc
+        self.output_doc = output_doc
+        function_name, params, lean_return_type = self.extract_function_signature()
         self.function_name = function_name
         self.params = params
-        self.return_type = return_type
+        self.lean_return_type = lean_return_type
         self.lean_arguments = self.build_lean_args()
         self.signature = self.build_signature()
         self.lean_task = self.build_lean_task()
@@ -56,9 +56,9 @@ class Dataset(Files, Parser):
 
     def build_description(self, log=False):
         description = (
-            f"{self.DESCRIPTION_TITLE}\n{self.description}\n\n"
-            f"{self.INPUT_TITLE}\n{self.inputs}\n\n"
-            f"{self.OUTPUT_TITLE}\n{self.outputs}"
+            f"{self.DESCRIPTION_TITLE}\n{self.description_doc}\n\n"
+            f"{self.INPUT_TITLE}\n{self.input_doc}\n\n"
+            f"{self.OUTPUT_TITLE}\n{self.output_doc}"
         )
 
         if log:
@@ -104,7 +104,7 @@ class Dataset(Files, Parser):
         signature = {
             "name": self.function_name,
             "parameters": self.params,
-            "return_type": self.return_type,
+            "return_type": self.lean_return_type,
         }
         if log:
             print(json.dumps(signature, indent=2))
@@ -124,13 +124,13 @@ class Dataset(Files, Parser):
 
     def build_lean_function(self) -> str:
         body = f"{self.CODE_START}\n{self.CODE_BODY}\n{self.CODE_END}"
-        return f"def {self.function_name} {self.lean_arguments} : {self.return_type} :=\n{body}"
+        return f"def {self.function_name} {self.lean_arguments} : {self.lean_return_type} :=\n{body}"
 
     def build_lean_spec(self, log=False) -> str:
         function_definition = (
             f"def {self.function_name}_spec "
             f"{self.lean_arguments} "
-            f"(_ : {self.return_type}) : Prop :="
+            f"(_ : {self.lean_return_type}) : Prop :="
         )
         spec = (
             f"{function_definition}\n"
