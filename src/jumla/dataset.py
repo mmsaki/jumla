@@ -4,6 +4,7 @@ from typing import Dict, List
 from dataclasses import dataclass
 from .files import Files
 from .parser import Parser
+from .log import logger
 
 
 @dataclass
@@ -13,7 +14,7 @@ class Dataset(Files, Parser):
     OUTPUT_TITLE = "-----Output-----"
     DESCRIPTION_FILENAME = "description.txt"
     SIGNATURE_FILENAME = "signature.json"
-    TASK_FILENAME = "task.lean"
+    LEAN_TASK_FILENAME = "task.lean"
     TEST_FILENAME = "test.json"
     LEAN_TEST_FILENAME = "tests.lean"
     CODE_START = "  -- << CODE START >>"
@@ -62,7 +63,7 @@ class Dataset(Files, Parser):
         )
 
         if log:
-            print(description)
+            logger.bullet(f"[build] {self.DESCRIPTION_FILENAME} ready")
 
         return description
 
@@ -79,7 +80,7 @@ class Dataset(Files, Parser):
 
     def write_lean_task(self, log=False):
         lean_sig = self.build_lean_task(log=log)
-        path = self.dir + self.TASK_FILENAME
+        path = self.dir + self.LEAN_TASK_FILENAME
         self.write_to_file(path, lean_sig, log=log)
 
     def write_tests(self, log=False):
@@ -94,11 +95,24 @@ class Dataset(Files, Parser):
         self.write_to_file(path, tests, log=log)
 
     def write_all(self, log=False):
+        logger.step(f"Writing dataset to `{self.dir}`")
+
         self.write_description(log=log)
+        logger.bullet(f"📄 {self.DESCRIPTION_FILENAME}")
+
         self.write_signature(log=log)
+        logger.bullet(f"🧾 {self.SIGNATURE_FILENAME}")
+
         self.write_lean_task(log=log)
+        logger.bullet(f"📘 {self.LEAN_TASK_FILENAME}")
+
         self.write_tests(log=log)
+        logger.bullet(f"🧪 {self.TEST_FILENAME}")
+
         self.write_lean_tests(log=log)
+        logger.bullet(f"🔍 {self.LEAN_TEST_FILENAME}")
+
+        logger.success(f"[✓] Dataset generated: {self.dir}")
 
     def build_signature(self, log=False) -> Dict[str, str]:
         signature = {
@@ -107,18 +121,18 @@ class Dataset(Files, Parser):
             "return_type": self.lean_return_type,
         }
         if log:
-            print(json.dumps(signature, indent=2))
+            logger.bullet(f"[build] {self.SIGNATURE_FILENAME} signature ready")
         return signature
 
     def build_lean_task(self, log=False) -> str:
         imports = "import Mathlib\nimport Aesop\n"
         function = self.build_lean_function()
-        spec = self.build_lean_spec()
-        theorem = self.build_lean_theorem()
+        spec = self.build_lean_spec(log=log)
+        theorem = self.build_lean_theorem(log=log)
         lean_task = f"{imports}\n{function}\n\n{spec}\n\n{theorem}"
 
         if log:
-            print(lean_task)
+            logger.info(f"  [build] {self.LEAN_TASK_FILENAME} task ready")
 
         return lean_task
 
@@ -137,7 +151,7 @@ class Dataset(Files, Parser):
             f"{self.SPEC_START}\n{self.SPEC_BODY}\n{self.SPEC_END}"
         )
         if log:
-            print(spec)
+            logger.info(f"  [build] {self.LEAN_TASK_FILENAME} spec ready")
         return spec
 
     def build_lean_theorem(self, log=False):
@@ -158,7 +172,7 @@ class Dataset(Files, Parser):
         )
 
         if log:
-            print(theorem)
+            logger.info(f"  [build] {self.LEAN_TASK_FILENAME} theorem ready")
 
         return theorem
 
@@ -176,7 +190,7 @@ class Dataset(Files, Parser):
             "unexpected": test_case.get("unexpected", [{}]),
         }
         if log:
-            print(f"{' '.join(test_case.get('input', ''))}")
+            logger.info(f"  [build] {self.TEST_FILENAME} ready")
 
         return test
 
@@ -207,7 +221,7 @@ class Dataset(Files, Parser):
         guard = f"#guard {self.function_name} {args} {operator} ({expected})"
 
         if log:
-            print(guard)
+            logger.info(f"  [build] {self.LEAN_TEST_FILENAME} ready")
         return guard
 
     def build_tests(self, log=False) -> List[Dict[str, str]]:

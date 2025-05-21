@@ -2,6 +2,7 @@ import importlib.util
 from pathlib import Path
 from jumla.dataset import Dataset
 from jumla.log import logger
+from os.path import join
 
 
 def create_dataset(path: Path, dir_name: str) -> Dataset:
@@ -34,10 +35,10 @@ def create_dataset(path: Path, dir_name: str) -> Dataset:
     )
 
 
-def write_to_dataset(path: Path, task_id: str, log=False):
+def write_to_dataset(path: Path, task_id: str, log=False, base_dir="dataset"):
     try:
-        dataset = create_dataset(path, dir_name=task_id)
+        full_dir = join(base_dir, task_id)
+        dataset = create_dataset(path, dir_name=full_dir)
         dataset.write_all(log=log)
-        logger.bullet(f"Generated: {dataset.dir}")
     except Exception as e:
         logger.error(f"Failed on {path.name}: {e}")
