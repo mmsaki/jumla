@@ -7,7 +7,7 @@ class Logger:
         self.start_time = time.time()
 
     def info(self, msg: str):
-        print(f"{msg}")
+        print(f"{Fore.LIGHTBLUE_EX}{msg}")
 
     def success(self, msg: str):
         print(f"{msg}")

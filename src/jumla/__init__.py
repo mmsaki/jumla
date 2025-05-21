@@ -18,7 +18,7 @@ def main():
     path = Path(args.path)
 
     if not path.exists():
-        print(f"[✗] Not found: {path}")
+        logger.error(f"[✗] Not found: {path}")
         return
 
     if path.is_dir():
@@ -29,7 +29,7 @@ def main():
             return
         for i, py_file in enumerate(py_files):
             task_id = f"task_id_{i}"
-            logger.bullet(f"[{task_id}] {py_file.name}")
+            logger.info(f"[{task_id}] {py_file.name}")
             write_to_dataset(py_file, task_id=task_id, log=args.log, base_dir=args.out)
         logger.finish()
     elif path.suffix == ".py":
