@@ -16,9 +16,6 @@ def create_dataset(path: Path, dir_name: str) -> Dataset:
     assert spec.loader is not None, f"No loader for module {path}"
     spec.loader.exec_module(module)
 
-    if hasattr(module, "dataset"):
-        return module.dataset
-
     required = ["function", "description_doc", "input_doc", "output_doc", "test_cases"]
     if not all(hasattr(module, key) for key in required):
         raise AttributeError(
@@ -37,7 +34,7 @@ def create_dataset(path: Path, dir_name: str) -> Dataset:
 
 def write_to_dataset(path: Path, task_id: str, log=False, base_dir="dataset"):
     try:
-        full_dir = join(base_dir, task_id)
+        full_dir = join(base_dir, task_id) + "/"
         dataset = create_dataset(path, dir_name=full_dir)
         dataset.write_all(log=log)
     except Exception as e:

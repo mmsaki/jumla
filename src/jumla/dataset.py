@@ -34,7 +34,7 @@ class Dataset(Files, Parser):
         input_doc: str,
         output_doc: str,
         test_cases: List[Dict[str, str]],
-        dir="task_id_0",
+        dir="dataset/task_id_0/",
     ):
         self.function = function
         self.description_doc = description_doc
@@ -49,11 +49,9 @@ class Dataset(Files, Parser):
         self.lean_task = self.build_lean_task()
         self.test_cases = test_cases
 
-        if not os.path.exists("dataset"):
-            os.makedirs("dataset")
-        if not os.path.exists(f"dataset/{dir}"):
-            os.makedirs(f"dataset/{dir}")
-        self.dir = f"dataset/{dir}/"
+        if not os.path.exists(dir):
+            os.makedirs(dir)
+        self.dir = dir
 
     def build_description(self, log=False):
         description = (

@@ -1,6 +1,6 @@
 [project]
 name = "jumla"
-version = "0.1.0"
+version = "0.1.2"
 description = "Jumla generates Lean 4 verification datasets from Python code and tests."
 readme = "README.md"
 authors = [
