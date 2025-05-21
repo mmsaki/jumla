@@ -1,33 +1,38 @@
-from jumla.dataset import Dataset
+import argparse
+from pathlib import Path
+from jumla.cli import write_to_dataset
+from jumla.log import logger
 
 
 def main():
-    print("Hello from jumla!")
-    fun = """def minOfThree(a: int, b: int, c: int) -> int:
-    return min(a, b, c)"""
-    description = """This task requires writing a Lean 4 method that finds the minimum among three given integers. The method should return the smallest value, ensuring that the result is less than or equal to each of the input numbers and that it is one of the provided integers."""
+    parser = argparse.ArgumentParser(
+        description="Jumla: Generate Lean tasks from Python specs."
+    )
+    parser.add_argument("path", help="Path to example .py file OR folder of examples")
+    parser.add_argument("--log", action="store_true", help="Print debug logs")
+    args = parser.parse_args()
 
-    inputs = """The input consists of three integers:
-a: The first integer.
-b: The second integer.
-c: The third integer."""
+    path = Path(args.path)
 
-    outputs = """The output is an integer:
-Returns the minimum of the three input numbers, assuring that the returned value is less than or equal to a, b, and c, and that it matches one of these values."""
-    test_cases = [
-        {"input": {"a": 3, "b": 2, "c": 1}, "expected": 1, "unexpected": [2, 3, -1]},
-        {"input": {"a": 5, "b": 5, "c": 5}, "expected": 5, "unexpected": [-1]},
-        {"input": {"a": 10, "b": 20, "c": 15}, "expected": 10, "unexpected": [5]},
-        {"input": {"a": -1, "b": 2, "c": 3}, "expected": -1, "unexpected": [2]},
-        {"input": {"a": 2, "b": -3, "c": 4}, "expected": -3, "unexpected": [4]},
-        {"input": {"a": 2, "b": 3, "c": -5}, "expected": -5, "unexpected": [2]},
-        {"input": {"a": 0, "b": 0, "c": 1}, "expected": 0, "unexpected": [1]},
-        {"input": {"a": 0, "b": -1, "c": 1}, "expected": -1, "unexpected": [0]},
-        {"input": {"a": -5, "b": -2, "c": -3}, "expected": -5, "unexpected": [1, -2]},
-    ]
-    dataset = Dataset(fun, description, inputs, outputs, test_cases)
+    if not path.exists():
+        print(f"[✗] Not found: {path}")
+        return
 
-    dataset.write_all(log=True)
+    if path.is_dir():
+        py_files = list(path.glob("*.py"))
+        if not py_files:
+            print(f"[!] No .py files found in {path}")
+            return
+        logger.info(f"Processing {len(py_files)} files in {path}")
+        for i, py_file in enumerate(py_files):
+            logger.bullet(f"Processing file: {py_file.name}")
+            task_id = f"task_id_{i}"
+            write_to_dataset(py_file, task_id=task_id, log=args.log)
+    elif path.suffix == ".py":
+        write_to_dataset(path, "task_id_0", log=args.log)
+    else:
+        print(f"[✗] Invalid file type: {path.name} (expected .py or directory)")
+    logger.finish()
 
 
 if __name__ == "__main__":

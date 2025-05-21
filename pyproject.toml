@@ -7,7 +7,9 @@ authors = [
     { name = "Meek Msaki", email = "meek10x@gmail.com" }
 ]
 requires-python = ">=3.10"
-dependencies = []
+dependencies = [
+    "colorama>=0.4.6",
+]
 
 [project.scripts]
 jumla = "jumla:main"
